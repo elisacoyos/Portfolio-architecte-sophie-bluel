@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 	<meta charset="UTF-8">
-	<title>Sophie Bluel - Architecte d'intérieur</title>
+	<title>Sophie Bluel - Interior Architect</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,41 +12,38 @@
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
+	<h1>Sophie Bluel <span>Interior Architect</span></h1>
 	<nav>
 		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li>login</li>
+			<li>Projects</li>
+			<li>Contact</li>
+			<li>Login</li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
 </header>
-
-
-
-
 <section id="contact">
-    <h2>Log In</h2>
-    <form action="#" method="post">
-        
+    <h2>Login</h2>
+    <form action="#" method="post" id="login-form">
         <label for="email">Email</label>
-        <input type="email" name="email" id="email">
-        <label for="password">Mot de passe:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="email" name="email" id="email" autocomplete="email">
+    
+        <div id="email-error" class="error-message"></div>
+    
+        <label for="password">Password:</label>
+        <input type="password" id="password-input" name="password" autocomplete="current-password">
+    
+        <div id="password-error" class="error-message"></div>
+    
         <input type="submit" value="Se connecter">
     </form>
+    
     <p>Mot de passe oublié</p>
 </section>
-
-
-
-
-
 <footer>
 	<nav>
 		<ul>
-			<li>Mentions Légales</li>
+			<li>Mentions légales</li>
 		</ul>
 	</nav>
 </footer>
