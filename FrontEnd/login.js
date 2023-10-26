@@ -41,6 +41,7 @@ init();
 
 function login(email, password) {
   console.log('hola') ;  
+  const errorMessage= document.querySelector(".error-message")
   fetch('http://localhost:5678/api/users/login',{
     
     method: 'POST',
@@ -53,25 +54,29 @@ function login(email, password) {
       
       if (response.status === 200) {
         console.log('Connexion réussie');
+        errorMessage.style.display="none";
        const data = await response.json();
        console.log(data);
-
 
        const token = data.token;
        localStorage.setItem('token', data.token);
        
-       window.location.href = 'http://127.0.0.1:5500/index.html';
+       window.location.href = './index.html';
 
       } else if (response.status === 500) {
         console.error('Erreur du serveur');
+        errorMessage.style.display="block";
       } else if (response.status === 404) {
         console.error('Utilisateur non trouvé');
+        errorMessage.style.display="block";
       } else {
         console.error('Erreur inconnue');
+        errorMessage.style.display="block";
       }
     })
     .catch(error => {
       console.error('Erreur de réseau:', error);
+      errorMessage.style.display="block";
     });
 }
 

@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Sophie Bluel - Architecte d'intérieur</title>
+	<script src="https://kit.fontawesome.com/ea00c843a1.js" crossorigin="anonymous"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,13 +12,17 @@
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
+	<div class="modal">
+		<i class="fa-regular fa-pen-to-square"></i>
+		<h2>Mode édition</h2>
+	</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 	<nav>
 		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li><a href="http://127.0.0.1:5500/login.html">login</a></li>
+			<li id="login-button">login</li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -37,7 +42,10 @@
 
 	
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="modal-portfolio">
+			<h2>Mes projets</h2>
+			<button id="modifierBtn"><i class="fa-regular fa-pen-to-square"></i>Modifier</button>
+		</div>
 		<div class="filters-container"></div>
 		<div class="gallery"> </div>
 	</section>

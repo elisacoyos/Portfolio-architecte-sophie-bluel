@@ -89,3 +89,27 @@ Promise.all([getCategoriesAPI(), getWorksAPI()])
     console.error('Error:', error);
   });
 
+
+
+  const loginButton = document.getElementById('login-button');
+  
+
+  if (localStorage.getItem('token')) {
+   
+    loginButton.textContent = 'Logout';
+
+    loginButton.addEventListener('click', function () {
+      
+      localStorage.removeItem('token');
+      
+      window.location.href = './login.html';
+    });
+  } else {
+    
+    loginButton.addEventListener('click', function () {
+     
+      window.location.href = './login.html';
+    });
+  }
+
+
