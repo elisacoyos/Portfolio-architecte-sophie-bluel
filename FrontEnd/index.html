@@ -12,9 +12,7 @@
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
-	<div class="modal">
-		<i class="fa-regular fa-pen-to-square"></i>
-		<h2>Mode édition</h2>
+	<div class="admin-banner">
 	</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
@@ -42,9 +40,8 @@
 
 	
 	<section id="portfolio">
-		<div class="modal-portfolio">
+		<div class="admin-portfolio">
 			<h2>Mes projets</h2>
-			<button id="modifierBtn"><i class="fa-regular fa-pen-to-square"></i>Modifier</button>
 		</div>
 		<div class="filters-container"></div>
 		<div class="gallery"> </div>
@@ -63,10 +60,6 @@
 		</form>
 	</section>
 </main>
-
-
-
-
 <footer>
 	<nav>
 		<ul>
@@ -74,6 +67,29 @@
 		</ul>
 	</nav>
 </footer>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Galerie Photo</h2> 
+        <div class="photo-gallery">
+			<div class="photo-item">
+                <img src="../FrontEnd/assets/images/abajour-tahina.png" alt="Foto 1">
+                <div class="delete-icon">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+			</div>
+
+			<div class="photo-item">
+                <img src="../FrontEnd/assets/images/appartement-paris-v.png" alt="Foto 2">
+                <div class="delete-icon">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+			</div>
+        </div>
+        <button class="add-photo">Ajouter une Photo</button> 
+    </div>
+</div>
+
 <script src="./script.js"></script>
 </body>
 </html>
