@@ -279,7 +279,7 @@ footer nav ul {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white; 
-    width: 400px; 
+    width: 23rem; 
     height: auto;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -291,7 +291,7 @@ footer nav ul {
     color: black;
     font-weight: 400;
     font-size: 20px;
-    padding: 1rem;
+    padding-top: 0.5rem;
 }   
 
 .close {
@@ -306,7 +306,6 @@ footer nav ul {
     display: flex;
     padding: 2rem;
     flex-wrap: wrap;
-    gap: 1rem;
     border-bottom: 1px solid #B3B3B3;
 }
 
@@ -344,3 +343,122 @@ footer nav ul {
 .add-photo {
 	margin-top: 1.5rem;
 }
+
+#add-photo {
+	border: none;
+	color: #306685;
+	background-color: #CBD6DC;
+	padding: 0.5rem 1.5rem;
+	border-radius: 60px;
+	font-family: syne;
+	font-weight: 700;
+	cursor: pointer;
+	font-size: 96%;
+}
+#add-photo:hover {
+	color: #306685;
+  }
+
+.second-modal {
+	display: none;
+}
+.back-icon {
+    position: absolute;  
+    left: 13px; 
+    font-size: 15px; 
+	cursor: pointer;
+}
+.second-modal .modal-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.image-icon {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 0 5rem;
+	background-color: #E8F1F6;
+	width: 10rem;
+	height: 13rem;
+}
+.image-icon i {
+	font-size: 5rem;
+	color: #B9C5CC;
+	padding-top: 1rem;
+}
+.image-icon p {
+	padding: 0.5rem 0.5rem;
+}
+
+#photo-form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
+	width: 20rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid #B3B3B3;
+}
+
+
+#photo-form input {
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+	width: 100%;
+	height: 2rem;
+}
+
+#valider-button {
+	background-color: #A7A7A7;
+	color: #FFFFFF;
+	border: none;
+	padding: 0.5rem 5rem;
+}
+#categorie {
+	position: relative;
+  }
+  
+#arrow-category {
+	position: absolute;
+    top: 79%;
+    right: 44px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+ /*estilo desglose de la flecha de segunda modal*/
+ #category-dropdown {
+	display: none;
+	position: absolute;
+    top: 81%;
+    left: 40px;
+    width: 81%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+  
+  #category-dropdown button {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	text-align: left;
+	cursor: pointer;
+	border: none;
+	background-color: transparent;
+	font-family: 'Work Sans', sans-serif;
+    font-weight: 400;
+	color: black;
+  }
+  
+  #category-dropdown button:hover {
+	color: inherit;
+  }
+
+/*CARGA DE IMAGEN EN ICONO*/
+
+  
+  

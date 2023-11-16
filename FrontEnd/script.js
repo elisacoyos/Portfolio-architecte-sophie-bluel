@@ -11,7 +11,6 @@ function getWorksAPI() {
     });
 }
 
-
 function displayProjects(projects) {
   const gallery = document.querySelector('.gallery');
   gallery.innerHTML = ''; 
@@ -41,7 +40,7 @@ function getCategoriesAPI() {
       if (response.ok) {
         return response.json();
       } else {
-        console.error('Error:', error);
+        console.error('Error:', response);
       }
     });
 }
@@ -124,14 +123,8 @@ Promise.all([getCategoriesAPI(), getWorksAPI()])
       modal.style.display = 'block';
     });
 
-    const closeBtn = document.querySelector('.close');
-
-    closeBtn.addEventListener('click', function () {
-      const modal = document.querySelector('.modal'); 
-      modal.style.display = 'none'; 
-    });
-
-
+    initModal();
+    openGalleryModal();
 
   } else {
     loginButton.addEventListener('click', function () {
@@ -139,6 +132,13 @@ Promise.all([getCategoriesAPI(), getWorksAPI()])
     });
   }
   
+
+  
+
+
+
+
+
 
 
   
