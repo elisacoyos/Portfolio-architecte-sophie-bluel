@@ -110,70 +110,32 @@ function displayGalleryModal(projects) {
       
 //click en flecha para ver categories//
 
+const categorieSelect = document.getElementById('arrow-category');
 
-const arrowCategory = document.getElementById('arrow-category');
-const categoryDropdown = document.getElementById('category-dropdown');
-const categorieInput = document.getElementById('categorie');
-
-// Evento click en la flecha
-arrowCategory.addEventListener('click', function () {
-  // si esta oculto el desglose se llama a la funcion de mostrar y se cambia la flecha y si no  que seria lo mismo a que esta mostrado todo a la inversa//
-  if (categoryDropdown.style.display === 'none') {
-    showCategoryDropdown();
-    rotateArrowIcon(true); // Gira la flecha hacia arriba
-  } else {
-    hideCategoryDropdown();
-    rotateArrowIcon(false); // Gira la flecha hacia abajo
-  }
-});
-
-// Función para mostrar el desglose
-function showCategoryDropdown() {
-  categoryDropdown.style.display = 'block';
-  
+// Agrega un evento click al select para cargar las opciones al hacer clic
+categorieSelect.addEventListener('click', function () {
+  // Llamada a la API para obtener las categorías 
   getCategoriesAPI()
     .then(categories => {
       displayCategoryOptions(categories);
     })
     .catch(error => {
-      console.error('Error', error);
+      console.error('Error:', error);
     });
-}
-
-// Función para ocultar el desglose
-function hideCategoryDropdown() {
-  categoryDropdown.style.display = 'none';
-}
-
-// Función para girar la flecha
-function rotateArrowIcon(upward) {
-  if (upward) {
-    arrowCategory.classList.remove('fa-chevron-down');
-    arrowCategory.classList.add('fa-chevron-up');
-  } else {
-    arrowCategory.classList.remove('fa-chevron-up');
-    arrowCategory.classList.add('fa-chevron-down');
-  }
-}
+});
 
 // Función para mostrar las opciones de categoría
 function displayCategoryOptions(categories) {
-    categoryDropdown.innerHTML = ''; //esto hace que cada vez que hago click limpie el desglose del click anterioir y me ponga de nuevo las categories sino se repiten //
+  categorieSelect.innerHTML = ''; // Limpia las opciones anteriores
 
   categories.forEach(category => {
-    const optionButton = document.createElement('button');
-    optionButton.textContent = category.name;
-
-    // Evento click en una opción
-    optionButton.addEventListener('click', function () {
-      categorieInput.value = category.name; // esto mete un value o contenido en el input categoria que sea igual a la propiedad name de cada elemento del array categories//
-      hideCategoryDropdown(); // Ocultar el desglose
-      rotateArrowIcon(false); // Gira la flecha hacia abajo
-    });
-
-    categoryDropdown.appendChild(optionButton); // sino pongo esto ni se ven los botones de las categorias, porque si bien las creo desde js tengo que insertarla en la div//
+    const option = document.createElement('option');
+    option.value = category.name;
+    option.textContent = category.name;
+    categorieSelect.appendChild(option);
   });
 }
+
 
   //CARGA DE FOTO EN ICONO DE IMAGEN//
 
@@ -200,10 +162,10 @@ function displaySelectedPhoto(file) {
     // Muestra la imagen en la misma div
     const imageElement = document.createElement('img');
     imageElement.src = e.target.result;
-    imageElement.style.maxWidth = '100%'; // Añadir estilo para ajustar al ancho máximo
-    imageElement.style.maxHeight = '100%'; // Añadir estilo para ajustar a la altura máxima
+    imageElement.style.maxWidth = '100%'; 
+    imageElement.style.maxHeight = '100%'; 
     imageElement.style.objectFit = 'cover';
-    photoIconContainer.innerHTML = ''; // Limpia el contenido actual
+    photoIconContainer.innerHTML = ''; 
     photoIconContainer.appendChild(imageElement);
   };
 
@@ -212,7 +174,75 @@ function displaySelectedPhoto(file) {
 
 
 
-   //para que no se cierre sola la second despues de cargar los tres cosos y al boton se activa//
+   //controler de formulaire//
 
 
-  
+   document.addEventListener('DOMContentLoaded', function () {
+    const formContainer = document.getElementById('photo-form');
+    const validerButton = document.getElementById('valider-button');
+
+    // Deshabilita el botón al cargar la página
+    validerButton.disabled = true;
+
+    // Agrega evento input al contenedor del formulario
+    formContainer.addEventListener('input', function () {
+        const titreValue = document.getElementById('titre').value.trim();
+        const categorieValue = document.getElementById('arrow-category').value;
+        const fileSelected = document.getElementById('file-input').files.length > 0;
+
+        // Verifica si los tres campos están completos
+        const formIsValid = titreValue !== '' && categorieValue !== '' && fileSelected;
+
+        // Habilita o deshabilita el botón en función del resultado
+        if (formIsValid) {
+            validerButton.removeAttribute('disabled');
+        } else {
+            validerButton.setAttribute('disabled', 'disabled');
+        }
+    });
+
+
+    // Aenviar proyecto a la API y lo muestra en galeria//
+
+    validerButton.addEventListener('click', function () {
+        const titreValue = document.getElementById('titre').value.trim();
+        const categorieValue = document.getElementById('arrow-category').value;
+        const fileInput = document.getElementById('file-input');
+        const fileSelected = fileInput.files.length > 0;
+
+        const formIsValid = titreValue !== '' && categorieValue !== '' && fileSelected;
+
+        if (formIsValid) {
+            const formData = new FormData();
+            formData.append('title', titreValue);
+            formData.append('category', categorieValue);
+            formData.append('image', fileInput.files[0]);
+
+            fetch('http://localhost:5678/api/works', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error');
+                }
+            })
+            .then(data => {
+                console.log('Datos enviados API:', data);
+                return getWorksAPI();
+            })
+            .then(projects => {
+                
+                displayProjects(projects);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+});

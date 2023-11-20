@@ -333,6 +333,7 @@ footer nav ul {
     height: 1.2rem;
     border-radius: 2px;
 	margin: 0.2rem;
+	cursor: pointer;
 }
 
 .delete-icon i {
@@ -399,7 +400,7 @@ footer nav ul {
 	align-items: flex-start;
 	gap: 0.5rem;
 	width: 20rem;
-	padding-bottom: 1.5rem;
+	padding-bottom: 4rem;
 	border-bottom: 1px solid #B3B3B3;
 }
 
@@ -412,51 +413,34 @@ footer nav ul {
 }
 
 #valider-button {
-	background-color: #A7A7A7;
+	background-color: #1D6154;
 	color: #FFFFFF;
 	border: none;
 	padding: 0.5rem 5rem;
 }
-#categorie {
-	position: relative;
-  }
+
+#valider-button:disabled {
+    opacity: 0.5;
+	cursor: not-allowed;
+	background-color: grey;
+}
+
+
   
 #arrow-category {
-	position: absolute;
-    top: 79%;
-    right: 44px;
+    position: absolute;
+    top: 79.5%;
+    right: 34px;
     transform: translateY(-50%);
     cursor: pointer;
+    padding: 0.5rem 5.8rem;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	width: 81%;
   }
 
- /*estilo desglose de la flecha de segunda modal*/
- #category-dropdown {
-	display: none;
-	position: absolute;
-    top: 81%;
-    left: 40px;
-    width: 81%;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-  }
-  
-  #category-dropdown button {
-	display: block;
-	width: 100%;
-	padding: 10px;
-	text-align: left;
-	cursor: pointer;
-	border: none;
-	background-color: transparent;
-	font-family: 'Work Sans', sans-serif;
-    font-weight: 400;
-	color: black;
-  }
-  
-  #category-dropdown button:hover {
-	color: inherit;
-  }
+ 
+
 
 /*CARGA DE IMAGEN EN ICONO*/
 

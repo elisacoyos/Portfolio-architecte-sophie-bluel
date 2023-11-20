@@ -6,7 +6,7 @@ function getWorksAPI() {
       if (response.ok) {
         return response.json();
       } else {
-        console.error('Error:', error);
+        throw new Error('Error');
       }
     });
 }
