@@ -10,27 +10,33 @@ function getWorksAPI() {
       }
     });
 }
+function displayProject(project) {
+
+  const figure = document.createElement('figure');
+
+  const image = document.createElement('img');
+  image.src = project.imageUrl;
+
+  const caption = document.createElement('figcaption');
+  caption.textContent = project.title;
+
+  figure.appendChild(image);
+  figure.appendChild(caption);
+  return figure ;
+
+}
 
 function displayProjects(projects) {
   const gallery = document.querySelector('.gallery');
   gallery.innerHTML = ''; 
 
   for (let i = 0; i < projects.length; i++) {
-    const project = projects[i];
-
-    const figure = document.createElement('figure');
-
-    const image = document.createElement('img');
-    image.src = project.imageUrl;
-
-    const caption = document.createElement('figcaption');
-    caption.textContent = project.title;
-
-    figure.appendChild(image);
-    figure.appendChild(caption);
-    gallery.appendChild(figure);
+    const project= displayProject(projects[i]);
+    gallery.appendChild(project)
   }
 }
+
+
 
 function getCategoriesAPI() {
   const apiURL = 'http://localhost:5678/api/categories';
@@ -131,9 +137,6 @@ Promise.all([getCategoriesAPI(), getWorksAPI()])
       window.location.href = './login.html';
     });
   }
-  
-
-  
 
 
 

@@ -126,6 +126,7 @@ nav a {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	cursor: pointer;
 }
 
 li:hover {
@@ -217,6 +218,10 @@ margin: auto;
 	text-align: center;
 
 }
+#contact p {
+	text-decoration: underline;
+	cursor: pointer;
+  }
 #contact h2{
 	margin-bottom: 20px;
 }
@@ -232,6 +237,8 @@ margin: auto;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	cursor: pointer;
+	margin-bottom: 1.5rem;
 }
 #contact label {
 	margin: 2em 0 1em 0;
@@ -258,6 +265,7 @@ footer nav ul {
 	justify-content: flex-end;
 	padding: 1rem;
 	background-color: white;
+	margin-top: 5rem;
 }
 
 
@@ -273,7 +281,7 @@ footer nav ul {
 }
 
 .modal-content {
-    position: absolute;
+    position: fixed;
     text-align: center;
     top: 50%;
     left: 50%;
@@ -362,6 +370,12 @@ footer nav ul {
 
 .second-modal {
 	display: none;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); 
 }
 .back-icon {
     position: absolute;  
@@ -375,6 +389,7 @@ footer nav ul {
 	align-items: center;
 	gap: 1rem;
 }
+
 
 .image-icon {
 	display: flex;
@@ -400,10 +415,11 @@ footer nav ul {
 	align-items: flex-start;
 	gap: 0.5rem;
 	width: 20rem;
-	padding-bottom: 4rem;
-	border-bottom: 1px solid #B3B3B3;
 }
 
+#photo-form h2 {
+	padding-left: 6.5rem;
+}
 
 #photo-form input {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -411,12 +427,22 @@ footer nav ul {
 	width: 100%;
 	height: 2rem;
 }
-
+#photo-form p {
+	padding: 1rem 0;
+}
+.line-divider {
+	width: 100%;
+    border: none;
+    border-top: 1px solid #ccc; 
+}
 #valider-button {
 	background-color: #1D6154;
 	color: #FFFFFF;
 	border: none;
 	padding: 0.5rem 5rem;
+	margin-left: 3rem;
+	margin-bottom: 0;
+	margin-top: 1rem;
 }
 
 #valider-button:disabled {
@@ -428,15 +454,11 @@ footer nav ul {
 
   
 #arrow-category {
-    position: absolute;
-    top: 79.5%;
-    right: 34px;
-    transform: translateY(-50%);
     cursor: pointer;
-    padding: 0.5rem 5.8rem;
+    padding: 0.6rem;
     border: none;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	width: 81%;
+	width: 100%;
   }
 
  

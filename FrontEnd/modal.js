@@ -41,7 +41,6 @@ function displayGalleryModal(projects) {
     
       .then(projects => {
         displayGalleryModal(projects);
-  
         
       })
 
@@ -52,7 +51,7 @@ function displayGalleryModal(projects) {
       });
   }
 
-  //para abrir la seguna modal//
+  //para abrir la segunda modal//
 
     function openAddProjetFormModal() { 
         const addPhotoButton = document.getElementById('add-photo-button');
@@ -68,6 +67,14 @@ function displayGalleryModal(projects) {
         const closeSecondModal = document.querySelector('.second-modal .close');
         closeSecondModal.addEventListener('click', () => {
           secondModal.style.display = 'none';
+        });
+
+        getCategoriesAPI()
+        .then(categories => {
+          displayCategoryOptions(categories);
+        })
+        .catch(error => {
+          console.error('Error:', error);
         });
       }
 //flecha back//
@@ -112,17 +119,7 @@ function displayGalleryModal(projects) {
 
 const categorieSelect = document.getElementById('arrow-category');
 
-// Agrega un evento click al select para cargar las opciones al hacer clic
-categorieSelect.addEventListener('click', function () {
-  // Llamada a la API para obtener las categorías 
-  getCategoriesAPI()
-    .then(categories => {
-      displayCategoryOptions(categories);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-});
+// Agrega un evento click al select para cargar las opciones al hacer cli
 
 // Función para mostrar las opciones de categoría
 function displayCategoryOptions(categories) {
@@ -130,7 +127,7 @@ function displayCategoryOptions(categories) {
 
   categories.forEach(category => {
     const option = document.createElement('option');
-    option.value = category.name;
+    option.value = category.id;
     option.textContent = category.name;
     categorieSelect.appendChild(option);
   });
@@ -177,72 +174,77 @@ function displaySelectedPhoto(file) {
    //controler de formulaire//
 
 
-   document.addEventListener('DOMContentLoaded', function () {
-    const formContainer = document.getElementById('photo-form');
+   document.addEventListener('DOMContentLoaded', function () {   //"Cuando todo el contenido de la página haya sido cargado, haz lo siguiente..."
     const validerButton = document.getElementById('valider-button');
 
-    // Deshabilita el botón al cargar la página
     validerButton.disabled = true;
 
-    // Agrega evento input al contenedor del formulario
-    formContainer.addEventListener('input', function () {
-        const titreValue = document.getElementById('titre').value.trim();
-        const categorieValue = document.getElementById('arrow-category').value;
-        const fileSelected = document.getElementById('file-input').files.length > 0;
 
-        // Verifica si los tres campos están completos
-        const formIsValid = titreValue !== '' && categorieValue !== '' && fileSelected;
-
-        // Habilita o deshabilita el botón en función del resultado
-        if (formIsValid) {
-            validerButton.removeAttribute('disabled');
-        } else {
-            validerButton.setAttribute('disabled', 'disabled');
-        }
-    });
-
-
-    // Aenviar proyecto a la API y lo muestra en galeria//
-
-    validerButton.addEventListener('click', function () {
-        const titreValue = document.getElementById('titre').value.trim();
-        const categorieValue = document.getElementById('arrow-category').value;
-        const fileInput = document.getElementById('file-input');
-        const fileSelected = fileInput.files.length > 0;
-
-        const formIsValid = titreValue !== '' && categorieValue !== '' && fileSelected;
-
-        if (formIsValid) {
-            const formData = new FormData();
-            formData.append('title', titreValue);
-            formData.append('category', categorieValue);
-            formData.append('image', fileInput.files[0]);
-
-            fetch('http://localhost:5678/api/works', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.error('Error');
-                }
-            })
-            .then(data => {
-                console.log('Datos enviados API:', data);
-                return getWorksAPI();
-            })
-            .then(projects => {
-                
-                displayProjects(projects);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    });
+    setupFormEvents();
 });
+//Aquí se agrega un evento al contenedor del formulario. El evento es de tipo 'input', lo que significa que se activará cada vez que haya una entrada de usuario en algún campo del formulario. Cuando este evento se dispare, llamará a la función validateForm.//
+function setupFormEvents() {
+    const formContainer = document.getElementById('photo-form');
+    formContainer.addEventListener('input', validateForm);
+}
+//aca extrae los elementos del formulario para contruir la variable que los controla//
+function validateForm() {
+    const titreValue = document.getElementById('titre').value.trim();
+    const categorieValue = document.getElementById('arrow-category').value;
+    const fileSelected = document.getElementById('file-input').files.length > 0;
+
+    const formIsValid = titreValue !== '' && categorieValue !== '' && fileSelected;
+
+    updateButtonState(formIsValid);
+}
+//le pone disabled cuando la variable booleana isValid es falsa por el !//
+function updateButtonState(isValid) {
+    const validerButton = document.getElementById('valider-button');
+    validerButton.disabled = !isValid;
+}
+
+const formModal=  document.getElementById('photo-form')
+
+
+formModal.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const titreValue = document.getElementById('titre').value.trim();
+    const categorieValue = document.getElementById('arrow-category').value;
+    const fileInput = document.getElementById('file-input');
+    const fileSelected = fileInput.files.length > 0;
+
+    const formIsValid = titreValue !== '' && categorieValue !== '' && fileSelected;
+
+    if (formIsValid) {
+        const formData = new FormData();
+        formData.append('title', titreValue);
+        formData.append('category', categorieValue);
+        formData.append('image', fileInput.files[0]);
+
+        fetch('http://localhost:5678/api/works', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error');
+            }
+        })
+        .then(data => {
+            console.log('Donnees envoyes API:', data);
+            const project = displayProject(data);
+            const gallery = document.querySelector('.gallery');
+            gallery.appendChild(project);
+        })
+        
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
+
