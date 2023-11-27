@@ -12,24 +12,27 @@ function init() {
 
     const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
-    const EmailValid = emailRegex.test(email.value);
-    const PasswordValid = password.value.trim() !== '';
+    const emailValid = email.value.trim().length > 0 && emailRegex.test(email.value);
+    const passwordValid = password.value.trim() !== '';
 
     const emailErrorMessage = document.getElementById('email-error');
     const passwordErrorMessage = document.getElementById('password-error');
 
-    if (EmailValid) {
+    if (emailValid) {
       emailErrorMessage.textContent = '';  
     } else {
       emailErrorMessage.textContent = 'Email invalid.'; 
+      emailErrorMessage.classList.toggle("error-message", false);
+
     }
 
-    if (PasswordValid) {
+    if (passwordValid) {
       passwordErrorMessage.textContent = '';
     } else {
       passwordErrorMessage.textContent = 'Password required.';
+      passwordErrorMessage.classList.toggle("error-message", false);
     }
-    if (EmailValid && PasswordValid) {
+    if (emailValid && passwordValid) {
       login(email.value,password.value);
     }
   });

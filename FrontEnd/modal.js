@@ -68,14 +68,6 @@ function displayGalleryModal(projects) {
         closeSecondModal.addEventListener('click', () => {
           secondModal.style.display = 'none';
         });
-
-        getCategoriesAPI()
-        .then(categories => {
-          displayCategoryOptions(categories);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
       }
 //flecha back//
 
@@ -119,7 +111,17 @@ function displayGalleryModal(projects) {
 
 const categorieSelect = document.getElementById('arrow-category');
 
-// Agrega un evento click al select para cargar las opciones al hacer cli
+// Agrega un evento click al select para cargar las opciones al hacer clic
+categorieSelect.addEventListener('click', function () {
+  // Llamada a la API para obtener las categorías 
+  getCategoriesAPI()
+    .then(categories => {
+      displayCategoryOptions(categories);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+});
 
 // Función para mostrar las opciones de categoría
 function displayCategoryOptions(categories) {
@@ -127,7 +129,7 @@ function displayCategoryOptions(categories) {
 
   categories.forEach(category => {
     const option = document.createElement('option');
-    option.value = category.id;
+    option.value = category.name;
     option.textContent = category.name;
     categorieSelect.appendChild(option);
   });
@@ -203,48 +205,59 @@ function updateButtonState(isValid) {
     validerButton.disabled = !isValid;
 }
 
-const formModal=  document.getElementById('photo-form')
 
 
-formModal.addEventListener('submit', function (e) {
+
+ // subir projecto a la api y postearlo
+
+ document.getElementById('valider-button').addEventListener('click', function (e) {
+   
     e.preventDefault();
+    // Obtiene el elemento de entrada de archivo
+    const fileInput = document.getElementById('file-input');
+    // Obtiene el primer archivo seleccionado
+    const file = fileInput.files[0];
     const titreValue = document.getElementById('titre').value.trim();
     const categorieValue = document.getElementById('arrow-category').value;
-    const fileInput = document.getElementById('file-input');
-    const fileSelected = fileInput.files.length > 0;
-
-    const formIsValid = titreValue !== '' && categorieValue !== '' && fileSelected;
-
-    if (formIsValid) {
+    console.log('categorieValue ',categorieValue)
+    // Verifica si se ha seleccionado un archivo
+    if (file) {
+        // Crea un objeto FormData y agrega el archivo y otros datos a él
         const formData = new FormData();
-        formData.append('title', titreValue);
-        formData.append('category', categorieValue);
-        formData.append('image', fileInput.files[0]);
+        formData.append('image', file);
+        formData.append('title', titreValue); // Puedes ajustar esto con el valor deseado
+        formData.append('category',categorieValue); //aca esss
 
+        // Realiza una solicitud fetch (POST) a la API
         fetch('http://localhost:5678/api/works', {
             method: 'POST',
             body: formData,
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                
             },
+            
         })
         .then(response => {
+            // Verifica si la respuesta de la API fue exitosa
             if (response.ok) {
+                // Parsea la respuesta JSON
                 return response.json();
             } else {
-                console.error('Error');
+                // En caso de error, lanza una excepción
+                throw new Error('Error');
             }
         })
-        .then(data => {
-            console.log('Donnees envoyes API:', data);
-            const project = displayProject(data);
-            const gallery = document.querySelector('.gallery');
-            gallery.appendChild(project);
-        })
-        
         .catch(error => {
+            // Captura y maneja errores
             console.error('Error:', error);
         });
+    } else {
+        // En caso de que no se haya seleccionado ningún archivo
+        console.error('No file selected.');
     }
 });
+
+      
+
 
