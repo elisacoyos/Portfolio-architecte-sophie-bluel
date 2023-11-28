@@ -10,6 +10,7 @@ function getWorksAPI() {
       }
     });
 }
+
 function displayProject(project) {
 
   const figure = document.createElement('figure');
@@ -84,27 +85,30 @@ function filterProjectsByCategory(projects, selectedCategory) {
 }
 
 
-Promise.all([getCategoriesAPI(), getWorksAPI()])
-  .then(([categories, projects]) => {
-    displayProjects(projects);
-    displayFilterButtons(categories, projects);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-  
-  
-  const loginButton = document.getElementById('login-button');
-
-  if (localStorage.getItem('token')) {
-    loginButton.textContent = 'Logout';
-  
-    loginButton.addEventListener('click', function () {
-      localStorage.removeItem('token');
-      window.location.href = './login.html';
+function initialLoad(addButtons = true) {
+    Promise.all([getCategoriesAPI(), getWorksAPI()])
+    .then(([categories, projects]) => {
+        displayProjects(projects);
+        if (addButtons === true)
+            displayFilterButtons(categories, projects);
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
+}    
   
-    
+initialLoad();
+const loginButton = document.getElementById('login-button');
+
+if (localStorage.getItem('token')) {
+    loginButton.textContent = 'Logout';
+
+    loginButton.addEventListener('click', function () {
+        localStorage.removeItem('token');
+        window.location.href = './login.html';
+    });
+
+
     const adminBanner = document.querySelector('.admin-banner');
     const adminBannerIcon = document.createElement('i');
     adminBannerIcon.classList.add('fa-regular', 'fa-pen-to-square');
@@ -112,8 +116,8 @@ Promise.all([getCategoriesAPI(), getWorksAPI()])
     adminBannerText.textContent = 'Mode édition';
     adminBanner.appendChild(adminBannerIcon);
     adminBanner.appendChild(adminBannerText);
-  
-    
+
+
     const adminPortfolio = document.querySelector('.admin-portfolio');
     const modifierButton = document.createElement('button');
     modifierButton.id = 'modifierBtn';
@@ -125,23 +129,15 @@ Promise.all([getCategoriesAPI(), getWorksAPI()])
 
 
     modifierButton.addEventListener('click', function () {
-      const modal = document.querySelector('.modal'); 
-      modal.style.display = 'block';
+        const modal = document.querySelector('.modal'); 
+        modal.style.display = 'block';
     });
 
     initModal();
     openGalleryModal();
 
-  } else {
+} else {
     loginButton.addEventListener('click', function () {
-      window.location.href = './login.html';
+        window.location.href = './login.html';
     });
   }
-
-
-
-
-
-
-
-  

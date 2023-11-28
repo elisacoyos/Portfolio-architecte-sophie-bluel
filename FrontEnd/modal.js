@@ -1,6 +1,55 @@
+const WORKS_API = "http://localhost:5678/api/works";
+const firstModal = document.querySelector('.modal');
+const secondModal = document.querySelector('.second-modal');
+const photoIconContainer = document.querySelector('.image-icon');
+const initialPhotoIconContent = photoIconContainer.innerHTML;
+
+function goBack() {
+  secondModal.style.display = 'none';  //Rappeler la fonction displayGalleryModal pour afficher la premiere modal//
+  firstModal.style.display = 'block';
+}
+
+function showSecondModal() {
+  firstModal.style.display = 'none';
+  secondModal.style.display = 'block';
+}
+
+function closeAllModals() {
+  firstModal.style.display = 'none';
+  secondModal.style.display = 'none';
+}
+
+function fillGalleryModal(projects) {
+    const photoGallery = document.querySelector('.photo-gallery');
+    photoGallery.innerHTML = "";
+    projects.forEach(project => { //itera sobre el array projects y en cada iteracion de cada project hac tdo eso, project es cada elemento del array//
+        const photoItem = document.createElement('div');
+        photoItem.className = 'photo-item';
+        photoItem.id = 'modal-project';
+    
+        const image = document.createElement('img');
+        image.src = project.imageUrl;
+    
+        const deleteIcon = document.createElement('div');
+        deleteIcon.className = 'delete-icon';
+        deleteIcon.innerHTML = '<i class="fas fa-trash-alt"></i>';
+  
+  
+        deleteIcon.addEventListener('click', function (e) {
+          e.preventDefault();
+          deleteProject(project.id, photoItem); 
+        });
+    
+  
+    
+        photoItem.appendChild(image);
+        photoItem.appendChild(deleteIcon);
+        photoGallery.appendChild(photoItem);
+      });  
+}
 
 function displayGalleryModal(projects) {
-    const photoGallery = document.querySelector('.photo-gallery');
+
     const closeBtn = document.querySelector('.close');
 
     closeBtn.addEventListener('click', function () {
@@ -8,44 +57,18 @@ function displayGalleryModal(projects) {
       modal.style.display = 'none'; 
     });
     
-    projects.forEach(project => { //itera sobre el array projects y en cada iteracion de cada project hac tdo eso, project es cada elemento del array//
-      const photoItem = document.createElement('div');
-      photoItem.className = 'photo-item';
-      photoItem.id = 'modal-project';
-  
-      const image = document.createElement('img');
-      image.src = project.imageUrl;
-  
-      const deleteIcon = document.createElement('div');
-      deleteIcon.className = 'delete-icon';
-      deleteIcon.innerHTML = '<i class="fas fa-trash-alt"></i>';
-
-
-      deleteIcon.addEventListener('click', function (e) {
-        e.preventDefault();
-        deleteProject(project.id); 
-      });
-  
-
-  
-      photoItem.appendChild(image);
-      photoItem.appendChild(deleteIcon);
-      photoGallery.appendChild(photoItem);
-    });
+    displayCategoryOptions();
+    fillGalleryModal(projects);    
   }
   
  
   function initModal() {
     openAddProjetFormModal();
     getWorksAPI()
-    
       .then(projects => {
         displayGalleryModal(projects);
         
       })
-
-
-      
       .catch(error => {
         console.error('Error', error);
       });
@@ -55,13 +78,9 @@ function displayGalleryModal(projects) {
 
     function openAddProjetFormModal() { 
         const addPhotoButton = document.getElementById('add-photo-button');
-        const secondModal = document.querySelector('.second-modal');
-        const firstModal = document.querySelector('.modal');
       
         addPhotoButton.addEventListener('click', () => {
-          firstModal.style.display = 'none';
-          secondModal.style.display = 'block';
-          
+          showSecondModal();
         });
       
         const closeSecondModal = document.querySelector('.second-modal .close');
@@ -73,21 +92,18 @@ function displayGalleryModal(projects) {
 
       function openGalleryModal() {
         const backButton = document.getElementById('back-button');
-        const secondModal = document.querySelector('.second-modal');
-        const firstModal = document.querySelector('.modal');
 
         backButton.addEventListener('click', () => {
-            secondModal.style.display = 'none';  //Rappeler la fonction displayGalleryModal pour afficher la premiere modal//
-            firstModal.style.display = 'block';
-          });
+            goBack();
+        });
 
     
       }
 
     //SUPRESION PROJECTO//
-    function deleteProject(projectId) { 
+    function deleteProject(projectId, photoItem) { 
         
-        fetch(`http://localhost:5678/api/works/${projectId}`, {
+        fetch(`${WORKS_API}/${projectId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -95,6 +111,8 @@ function displayGalleryModal(projects) {
         })
           .then(response => {
             if (response.ok) {
+              photoItem.remove();
+              initialLoad();
             } else {
               console.error('Error al eliminar el proyecto');
             }
@@ -111,27 +129,27 @@ function displayGalleryModal(projects) {
 
 const categorieSelect = document.getElementById('arrow-category');
 
-// Agrega un evento click al select para cargar las opciones al hacer clic
-categorieSelect.addEventListener('click', function () {
-  // Llamada a la API para obtener las categorías 
-  getCategoriesAPI()
-    .then(categories => {
-      displayCategoryOptions(categories);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-});
-
 // Función para mostrar las opciones de categoría
-function displayCategoryOptions(categories) {
-  categorieSelect.innerHTML = ''; // Limpia las opciones anteriores
+function displayCategoryOptions() {
+  if (categorieSelect.length > 0) return;
 
-  categories.forEach(category => {
+  getCategoriesAPI()
+  .then(categories => {
+    categorieSelect.innerHTML = ''; // Limpia las opciones anteriores
+
     const option = document.createElement('option');
-    option.value = category.name;
-    option.textContent = category.name;
+    option.value = -1;
+    option.textContent = "";
     categorieSelect.appendChild(option);
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category.id;
+      option.textContent = category.name;
+      categorieSelect.appendChild(option);
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
   });
 }
 
@@ -141,7 +159,6 @@ function displayCategoryOptions(categories) {
  
 
 const fileInput = document.getElementById('file-input');
-const photoIconContainer = document.querySelector('.image-icon');
 const addPhotoLabel = document.getElementById('add-photo');
 
 
@@ -172,6 +189,13 @@ function displaySelectedPhoto(file) {
 }
 
 
+function isFormEmpty() {
+    const isEmpty = document.getElementById('titre').value.trim() === "" ||
+                    document.getElementById('file-input').value === "" ||
+                    document.getElementById('arrow-category').value === "-1";
+    document.getElementById("message-empty-form").classList.toggle("hidden", !isEmpty);
+}
+
 
    //controler de formulaire//
 
@@ -183,12 +207,32 @@ function displaySelectedPhoto(file) {
 
 
     setupFormEvents();
+    document.getElementById('titre').addEventListener("keyup", () => {
+        isFormEmpty();
+    });
+
+    document.getElementById('file-input').addEventListener("change", () => {
+        isFormEmpty();
+    });
+
+    document.getElementById('arrow-category').addEventListener("change", () => {
+        isFormEmpty();
+    });
 });
 //Aquí se agrega un evento al contenedor del formulario. El evento es de tipo 'input', lo que significa que se activará cada vez que haya una entrada de usuario en algún campo del formulario. Cuando este evento se dispare, llamará a la función validateForm.//
 function setupFormEvents() {
     const formContainer = document.getElementById('photo-form');
     formContainer.addEventListener('input', validateForm);
 }
+
+// limpiamos el formulario
+function clearForm() {
+  document.getElementById('titre').value = "";
+  document.getElementById('arrow-category').selectedIndex = 0;
+  document.getElementById('file-input').value = null;
+  document.querySelector('.image-icon').innerHTML = initialPhotoIconContent;
+}
+
 //aca extrae los elementos del formulario para contruir la variable que los controla//
 function validateForm() {
     const titreValue = document.getElementById('titre').value.trim();
@@ -219,7 +263,6 @@ function updateButtonState(isValid) {
     const file = fileInput.files[0];
     const titreValue = document.getElementById('titre').value.trim();
     const categorieValue = document.getElementById('arrow-category').value;
-    console.log('categorieValue ',categorieValue)
     // Verifica si se ha seleccionado un archivo
     if (file) {
         // Crea un objeto FormData y agrega el archivo y otros datos a él
@@ -229,7 +272,7 @@ function updateButtonState(isValid) {
         formData.append('category',categorieValue); //aca esss
 
         // Realiza una solicitud fetch (POST) a la API
-        fetch('http://localhost:5678/api/works', {
+        fetch(WORKS_API, {
             method: 'POST',
             body: formData,
             headers: {
@@ -241,8 +284,11 @@ function updateButtonState(isValid) {
         .then(response => {
             // Verifica si la respuesta de la API fue exitosa
             if (response.ok) {
-                // Parsea la respuesta JSON
-                return response.json();
+                initialLoad(false);
+                initModal();
+                //goBack();
+                closeAllModals();
+                clearForm();
             } else {
                 // En caso de error, lanza una excepción
                 throw new Error('Error');
@@ -257,6 +303,7 @@ function updateButtonState(isValid) {
         console.error('No file selected.');
     }
 });
+
 
       
 
