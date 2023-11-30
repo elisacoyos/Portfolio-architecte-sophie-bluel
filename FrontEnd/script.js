@@ -7,32 +7,38 @@ function getWorksAPI() {
       if (response.ok) {
         return response.json();
       } else {
-        console.error('Error:', error);
+        throw new Error('Error');
       }
     });
 }
 
+function displayProject(project) {
+
+  const figure = document.createElement('figure');
+
+  const image = document.createElement('img');
+  image.src = project.imageUrl;
+
+  const caption = document.createElement('figcaption');
+  caption.textContent = project.title;
+
+  figure.appendChild(image);
+  figure.appendChild(caption);
+  return figure ;
+
+}
 
 function displayProjects(projects) {
   const gallery = document.querySelector('.gallery');
   gallery.innerHTML = ''; 
 
   for (let i = 0; i < projects.length; i++) {
-    const project = projects[i];
-
-    const figure = document.createElement('figure');
-
-    const image = document.createElement('img');
-    image.src = project.imageUrl;
-
-    const caption = document.createElement('figcaption');
-    caption.textContent = project.title;
-
-    figure.appendChild(image);
-    figure.appendChild(caption);
-    gallery.appendChild(figure);
+    const project= displayProject(projects[i]);
+    gallery.appendChild(project)
   }
 }
+
+
 
 function getCategoriesAPI() {
   const apiURL = 'http://localhost:5678/api/categories';
@@ -42,7 +48,7 @@ function getCategoriesAPI() {
       if (response.ok) {
         return response.json();
       } else {
-        console.error('Error:', error);
+        console.error('Error:', response);
       }
     });
 }
@@ -50,7 +56,7 @@ function getCategoriesAPI() {
 
 function displayFilterButtons(categories, projects) {
   const filtersContainer = document.querySelector('.filters-container');
-
+  filtersContainer.innerHTML= '';
   const allButton = document.createElement('button');
   allButton.textContent = 'Tous';
   filtersContainer.appendChild(allButton);
@@ -80,12 +86,58 @@ function filterProjectsByCategory(projects, selectedCategory) {
 }
 
 
-Promise.all([getCategoriesAPI(), getWorksAPI()])
-  .then(([categories, projects]) => {
-    displayProjects(projects);
-    displayFilterButtons(categories, projects);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+function initialLoad() {
+    Promise.all([getCategoriesAPI(), getWorksAPI()])
+    .then(([categories, projects]) => {
+        displayProjects(projects);      
+         displayFilterButtons(categories, projects);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}    
+  
+initialLoad();
+const loginButton = document.getElementById('login-button');
 
+if (localStorage.getItem('token')) {
+    loginButton.textContent = 'Logout';
+
+    loginButton.addEventListener('click', function () {
+        localStorage.removeItem('token');
+        window.location.href = './login.html';
+    });
+
+
+    const adminBanner = document.querySelector('.admin-banner');
+    const adminBannerIcon = document.createElement('i');
+    adminBannerIcon.classList.add('fa-regular', 'fa-pen-to-square');
+    const adminBannerText = document.createElement('h2');
+    adminBannerText.textContent = 'Mode édition';
+    adminBanner.appendChild(adminBannerIcon);
+    adminBanner.appendChild(adminBannerText);
+
+
+    const adminPortfolio = document.querySelector('.admin-portfolio');
+    const modifierButton = document.createElement('button');
+    modifierButton.id = 'modifierBtn';
+    const modifierButtonIcon = document.createElement('i');
+    modifierButtonIcon.classList.add('fa-regular', 'fa-pen-to-square');
+    modifierButton.appendChild(modifierButtonIcon);
+    modifierButton.innerHTML += 'Modifier';
+    adminPortfolio.appendChild(modifierButton);
+
+
+    modifierButton.addEventListener('click', function () {
+        const modal = document.querySelector('.modal'); 
+        modal.style.display = 'block';
+    });
+
+    initModal();
+    openGalleryModal();
+
+} else {
+    loginButton.addEventListener('click', function () {
+        window.location.href = './login.html';
+    });
+}

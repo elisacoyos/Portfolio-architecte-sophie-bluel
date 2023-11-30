@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Sophie Bluel - Architecte d'intérieur</title>
+	<script src="https://kit.fontawesome.com/ea00c843a1.js" crossorigin="anonymous"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,13 +12,15 @@
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
+	<div class="admin-banner">
+	</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 	<nav>
 		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li>login</li>
+			<li id="login-button">login</li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -37,7 +40,9 @@
 
 	
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="admin-portfolio">
+			<h2>Mes projets</h2>
+		</div>
 		<div class="filters-container"></div>
 		<div class="gallery"> </div>
 	</section>
@@ -55,10 +60,6 @@
 		</form>
 	</section>
 </main>
-
-
-
-
 <footer>
 	<nav>
 		<ul>
@@ -66,6 +67,46 @@
 		</ul>
 	</nav>
 </footer>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Galerie Photo</h2> 
+        <div class="photo-gallery">
+			
+		</div>
+        <button id="add-photo-button" class="add-photo">Ajouter une Photo</button> 
+    </div>
+</div>
+
+<div class="second-modal">
+    <div class="modal-content" id="modal-content-second">
+		   <i id="back-button" class="fa-solid fa-arrow-left back-icon"></i>
+           <span class="close">&times;</span>
+	    <form id="photo-form">
+           <h2>Ajout photo</h2>
+		   <div class="image-icon">
+               <i class="fa-regular fa-image"></i>
+               <label for="file-input" class="add-photo" id="add-photo" >+ Ajouter photo</label> 
+               <p>jpg, png : 4mo max</p>
+           </div>
+        
+            <label for="titre">Titre:</label>
+            <input type="text" id="titre" name="titre" required>
+            <label for="categorie">Catégorie:</label>
+			<select  id="arrow-category"  name="categorie" required></select>
+			<p  id="message-empty-form">Veuillez remplir le formulaire</p>
+			<hr class="line-divider">
+			
+		<input type="file" id="file-input" style="display: none;">
+		<button type="submit" id="valider-button">Valider</button>
+	</form>
+    </div>
+</div>
+
+
+
+<script src="./modal.js"></script>
 <script src="./script.js"></script>
+
 </body>
 </html>
