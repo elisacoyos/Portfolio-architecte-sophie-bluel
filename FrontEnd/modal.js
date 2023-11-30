@@ -5,7 +5,7 @@ const photoIconContainer = document.querySelector('.image-icon');
 const initialPhotoIconContent = photoIconContainer.innerHTML;
 
 function goBack() {
-  secondModal.style.display = 'none'; 
+  secondModal.style.display = 'none';  
   firstModal.style.display = 'block';
 }
 
@@ -75,6 +75,7 @@ function displayGalleryModal(projects) {
   }
 
 
+
     function openAddProjetFormModal() { 
         const addPhotoButton = document.getElementById('add-photo-button');
       
@@ -87,6 +88,7 @@ function displayGalleryModal(projects) {
           secondModal.style.display = 'none';
         });
       }
+
 
       function openGalleryModal() {
         const backButton = document.getElementById('back-button');
@@ -197,7 +199,6 @@ function isFormEmpty() {
         isFormEmpty();
     });
 });
-
 function setupFormEvents() {
     const formContainer = document.getElementById('photo-form');
     formContainer.addEventListener('input', validateForm);
@@ -219,7 +220,6 @@ function validateForm() {
 
     updateButtonState(formIsValid);
 }
-
 function updateButtonState(isValid) {
     const validerButton = document.getElementById('valider-button');
     validerButton.disabled = !isValid;

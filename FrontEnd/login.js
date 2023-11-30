@@ -43,45 +43,37 @@ init();
 
 
 function login(email, password) {
-  console.log('hola') ;  
-  const errorMessage= document.querySelector(".error-message")
-  fetch('http://localhost:5678/api/users/login',{
-    
-    method: 'POST',
-    body: JSON.stringify({email, password}),
-    headers: {
-      "Content-Type": "application/json",
-    }
-  })
-    .then(async response => {
-      
-      if (response.status === 200) {
-        console.log('Connexion réussie');
-        errorMessage.style.display="none";
-       const data = await response.json();
-       console.log(data);
-
-       const token = data.token;
-       localStorage.setItem('token', data.token);
-       
-       window.location.href = './index.html';
-
-      } else if (response.status === 500) {
-        console.error('Erreur du serveur');
-        errorMessage.style.display="block";
-      } else if (response.status === 404) {
-        console.error('Utilisateur non trouvé');
-        errorMessage.style.display="block";
-      } else {
-        console.error('Erreur inconnue');
-        errorMessage.style.display="block";
-      }
+    console.log('hola');
+  
+    const formdata = new FormData();
+    formdata.append('email', email);
+    formdata.append('password', password);
+     
+    fetch('http://localhost:5678/api/users/login',{
+      method: 'POST',
+      body: formdata
     })
-    .catch(error => {
-      console.error('Erreur de réseau:', error);
-      errorMessage.style.display="block";
-    });
-}
+      .then(response => {
+        console.log(response);
+        if (response.status === 200) {
+          console.log('Connexion réussie');
+          return response.json();
+        } else if (response.status === 500) {
+          console.error('Erreur du serveur');
+        } else if (response.status === 404) {
+          console.error('Utilisateur non trouvé');
+        } else {
+          console.error('Erreur inconnue');
+        }
+      })
+      .catch(error => {
+        console.error('Erreur de réseau:', error);
+      });
+  }
+  
+
+  
+  
 
 
 
