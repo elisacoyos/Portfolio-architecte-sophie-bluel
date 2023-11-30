@@ -55,7 +55,7 @@ function getCategoriesAPI() {
 
 function displayFilterButtons(categories, projects) {
   const filtersContainer = document.querySelector('.filters-container');
-
+  filtersContainer.innerHTML= '';
   const allButton = document.createElement('button');
   allButton.textContent = 'Tous';
   filtersContainer.appendChild(allButton);
@@ -85,12 +85,11 @@ function filterProjectsByCategory(projects, selectedCategory) {
 }
 
 
-function initialLoad(addButtons = true) {
+function initialLoad() {
     Promise.all([getCategoriesAPI(), getWorksAPI()])
     .then(([categories, projects]) => {
-        displayProjects(projects);
-        if (addButtons === true)
-            displayFilterButtons(categories, projects);
+        displayProjects(projects);      
+         displayFilterButtons(categories, projects);
     })
     .catch(error => {
         console.error('Error:', error);
@@ -140,4 +139,4 @@ if (localStorage.getItem('token')) {
     loginButton.addEventListener('click', function () {
         window.location.href = './login.html';
     });
-  }
+}

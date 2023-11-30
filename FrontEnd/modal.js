@@ -304,7 +304,6 @@ function updateButtonState(isValid) {
     }
 });
 
-
       
 
 
